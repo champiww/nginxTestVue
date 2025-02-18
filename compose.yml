@@ -1,0 +1,55 @@
+services:
+    # web:
+    #     image: nginx:latest
+    #     ports:
+    #         - 80:80
+    #         - 443:443
+    #     volumes:
+    #         - ./nginx/test2.lan.conf:/etc/nginx/conf.d/test2.lan.conf
+    #         - ./vue-material-dashboard/dist:/html
+    #     networks:
+    #         rede_test:
+    #             aliases:
+    #                 - test2.lan
+
+    # apacheserver:
+    #     image: httpd:latest
+    #     volumes:
+    #         - ./vue-material-dashboard/dist:/usr/local/apache2/htdocs
+    #     networks:
+    #         - rede_interna
+
+    php:
+        image: php:8-apache
+        volumes:
+            - ./php:/php
+            - ./apache/test4.lan.conf:/etc/apache2/sites-enabled/test4.lan.conf
+        networks:
+            - rede_interna
+
+    proxy:
+        image: nginx:latest
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./nginx/test3.lan.conf:/etc/nginx/conf.d/test3.lan.conf
+        networks:
+            rede_interna:
+            rede_test:
+                aliases:
+                    - test3.lan
+
+    cliente:
+        hostname: cliente
+        image: brunosct/debian12-cliente-firefox
+        networks:
+            - rede_test
+        environment:
+            - DISPLAY=${DISPLAY}
+        volumes:
+            - /tmp/.X11-unix/:/tmp/.X11-unix/
+
+networks:
+    rede_test:
+    rede_interna:
