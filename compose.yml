@@ -27,12 +27,34 @@ services:
         networks:
             - rede_interna
 
+    phpserver1:
+        image: php:8-fpm
+        volumes:
+            - ./php:/var/www/app
+        networks:
+            - rede_interna
+
+    phpserver2:
+        image: php:8-fpm
+        volumes:
+            - ./php:/var/www/app
+        networks:
+            - rede_interna
+
+    phpserver3:
+        image: php:8-fpm
+        volumes:
+            - ./php:/var/www/app
+        networks:
+            - rede_interna
+
     proxy:
         image: nginx:latest
         ports:
             - 80:80
             - 443:443
         volumes:
+            - ./php:/php
             - ./nginx/test3.lan.conf:/etc/nginx/conf.d/test3.lan.conf
         networks:
             rede_interna:
